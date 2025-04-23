@@ -114,6 +114,25 @@ npm run dev
   }
   ```
 
+## Importante: Tokens de Confirmación
+
+Al generar un pago con el endpoint `POST /api/wallet/pagar`, la aplicación simula el envío de un email y muestra en la consola del servidor:
+- El token de confirmación (código de 6 dígitos)
+- El sessionId que necesita para confirmar el pago
+
+**Ejemplo de lo que verá en la consola:**
+```
+========================================
+SIMULACIÓN DE ENVÍO DE EMAIL:
+Destinatario: usuario@ejemplo.com
+Token de confirmación: 123456
+ID de Sesión: 10
+========================================
+```
+
+Para confirmar el pago debe usar exactamente este token y sessionId en la llamada al endpoint `POST /api/wallet/confirmar`. 
+Si intenta usar un token diferente o un sessionId incorrecto, la confirmación fallará.
+
 ## Servicio SOAP
 
 El servicio SOAP estará disponible en:

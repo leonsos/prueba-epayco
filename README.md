@@ -9,7 +9,6 @@ Este proyecto implementa una billetera virtual con un servicio SOAP y un servici
 - MySQL (Puerto 3307)
 - Sequelize ORM
 - SOAP/node-soap
-- Nodemailer
 
 ## Estructura del Proyecto
 

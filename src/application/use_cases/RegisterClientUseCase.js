@@ -31,11 +31,19 @@ class RegisterClientUseCase {
       }
       
       // Verificar si el cliente ya existe
-      const existingClientByDoc = await this.clientRepository.findByDocumento(documento);
-      const existingClientByEmail = await this.clientRepository.findByEmail(email);
-      
-      if (existingClientByDoc || existingClientByEmail) {
-        return this.createResponse(false, '02', 'El cliente ya está registrado con ese documento o email');
+      try {
+        const existingClientByDoc = await this.clientRepository.findByDocumento(documento);
+        const existingClientByEmail = await this.clientRepository.findByEmail(email);
+        
+        if (existingClientByDoc || existingClientByEmail) {
+          return this.createResponse(false, '02', 'El cliente ya está registrado con ese documento o email');
+        }
+      } catch (dbError) {
+        console.error('Error de base de datos en verificación:', dbError);
+        if (dbError.name === 'SequelizeDatabaseError') {
+          return this.createResponse(false, '98', `Error en la base de datos: ${dbError.message}`);
+        }
+        throw dbError;
       }
       
       // Crear la entidad cliente

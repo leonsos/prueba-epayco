@@ -14,6 +14,11 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT || 3307,
     dialect: 'mysql',
     logging: false,
+    define: {
+      timestamps: true,
+      // Aseguramos que los nombres de las columnas de timestamp sean camelCase, no snake_case
+      underscored: false
+    },
     pool: {
       max: 5,
       min: 0,

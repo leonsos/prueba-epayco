@@ -26,7 +26,14 @@ async function init() {
   try {
     // Configurar la base de datos
     await initDatabase();
-    await syncDatabase(false); // false para no forzar la recreación de tablas en producción
+    
+    console.log('Verificando estructura de base de datos...');
+    // Si es la primera vez o necesitamos resetear la estructura, usar true
+    // En producción usar false para preservar datos
+    const forceSync = process.env.FORCE_SYNC === 'true' || false;
+    console.log(`Sincronizando base de datos con force=${forceSync}`);
+    
+    await syncDatabase(forceSync);
     
     // Instanciar repositorios
     const clientRepository = new SequelizeClientRepository();

@@ -45,7 +45,12 @@ class Session {
    * @returns {boolean} - true si el token coincide
    */
   validateToken(tokenToVerify) {
-    return this.token === tokenToVerify;
+    console.log('Validando token:');
+    console.log('Token almacenado:', this.token);
+    console.log('Token recibido:', tokenToVerify);
+    const isValid = this.token === tokenToVerify;
+    console.log('¿Son iguales?', isValid);
+    return isValid;
   }
 }
 

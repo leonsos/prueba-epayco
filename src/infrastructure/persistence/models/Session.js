@@ -15,7 +15,7 @@ const Session = sequelize.define('Session', {
     }
   },
   token: {
-    type: DataTypes.STRING(6),
+    type: DataTypes.STRING(255),
     allowNull: false
   },
   valor: {
@@ -31,12 +31,15 @@ const Session = sequelize.define('Session', {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: () => {
-      return new Date(new Date().getTime() + 30 * 60000); // 30 minutos
+      const now = new Date();
+      return new Date(now.getTime() + 30 * 60000); // 30 minutos
     }
   }
 }, {
   tableName: 'sessions',
   timestamps: true,
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   indexes: [
     {
       fields: ['token']
@@ -50,8 +53,13 @@ const Session = sequelize.define('Session', {
   ]
 });
 
-// Definir relación con Cliente
-Session.belongsTo(Client, { foreignKey: 'clientId' });
+// Establecer la relación con Client
+Session.belongsTo(Client, {
+  foreignKey: {
+    name: 'clientId',
+    allowNull: false
+  }
+});
 Client.hasMany(Session, { foreignKey: 'clientId' });
 
 module.exports = Session; 

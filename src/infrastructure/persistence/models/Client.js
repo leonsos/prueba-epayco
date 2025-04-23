@@ -34,17 +34,8 @@ const Client = sequelize.define('Client', {
 }, {
   tableName: 'clients',
   timestamps: true,
-  indexes: [
-    {
-      fields: ['documento']
-    },
-    {
-      fields: ['email']
-    },
-    {
-      fields: ['documento', 'celular']
-    }
-  ]
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 });
 
 module.exports = Client; 

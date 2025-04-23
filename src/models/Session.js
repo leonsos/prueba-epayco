@@ -27,7 +27,9 @@ const Session = sequelize.define('Session', {
   }
 }, {
   tableName: 'sessions',
-  timestamps: true
+  timestamps: true,
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 });
 
 // Establecer la relación con Client

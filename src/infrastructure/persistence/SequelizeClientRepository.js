@@ -39,13 +39,24 @@ class SequelizeClientRepository extends ClientRepository {
    * @inheritdoc
    */
   async findByDocumento(documento) {
-    const clientData = await ClientModel.findOne({
-      where: { documento }
-    });
-    
-    if (!clientData) return null;
-    
-    return this._toDomainEntity(clientData);
+    try {
+      console.log('Buscando cliente con documento:', documento);
+      
+      // Intentar consulta directa con atributos específicos
+      const clientData = await ClientModel.findOne({
+        where: { documento },
+        attributes: ['id', 'documento', 'nombres', 'email', 'celular', 'saldo']
+      });
+      
+      console.log('Resultado de la consulta:', clientData ? 'Cliente encontrado' : 'Cliente no encontrado');
+      
+      if (!clientData) return null;
+      
+      return this._toDomainEntity(clientData);
+    } catch (error) {
+      console.error('Error en findByDocumento:', error);
+      throw error;
+    }
   }
 
   /**

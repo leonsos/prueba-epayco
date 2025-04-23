@@ -16,7 +16,8 @@ const sequelize = new Sequelize(
     logging: console.log,
     define: {
       timestamps: true,
-      underscored: true
+      // Aseguramos que los nombres de las columnas de timestamp sean camelCase, no snake_case
+      underscored: false 
     },
     pool: {
       max: 5,

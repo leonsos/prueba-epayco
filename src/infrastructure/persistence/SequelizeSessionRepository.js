@@ -12,11 +12,27 @@ class SequelizeSessionRepository extends SessionRepository {
    * @inheritdoc
    */
   async findById(id) {
-    const sessionData = await SessionModel.findByPk(id);
-    
-    if (!sessionData) return null;
-    
-    return this._toDomainEntity(sessionData);
+    try {
+      console.log('Buscando sesión con ID:', id);
+      
+      const sessionData = await SessionModel.findByPk(id);
+      
+      if (!sessionData) {
+        console.log('Sesión no encontrada con ID:', id);
+        return null;
+      }
+      
+      console.log('Sesión encontrada:', {
+        id: sessionData.id,
+        token: sessionData.token,
+        isUsed: sessionData.isUsed
+      });
+      
+      return this._toDomainEntity(sessionData);
+    } catch (error) {
+      console.error('Error al buscar sesión por ID:', error);
+      throw error;
+    }
   }
 
   /**
@@ -29,6 +45,11 @@ class SequelizeSessionRepository extends SessionRepository {
       valor: sessionEntity.valor,
       isUsed: sessionEntity.isUsed,
       expiresAt: sessionEntity.expiresAt
+    });
+    
+    console.log('Sesión creada:', {
+      id: sessionData.id,
+      token: sessionData.token
     });
     
     return this._toDomainEntity(sessionData);
@@ -78,13 +99,22 @@ class SequelizeSessionRepository extends SessionRepository {
    * @inheritdoc
    */
   async findByToken(token) {
-    const sessionData = await SessionModel.findOne({
-      where: { token }
-    });
-    
-    if (!sessionData) return null;
-    
-    return this._toDomainEntity(sessionData);
+    try {
+      console.log('Buscando sesión con token:', token);
+      
+      const sessionData = await SessionModel.findOne({
+        where: { token }
+      });
+      
+      console.log('Resultado de búsqueda por token:', sessionData ? 'Encontrado' : 'No encontrado');
+      
+      if (!sessionData) return null;
+      
+      return this._toDomainEntity(sessionData);
+    } catch (error) {
+      console.error('Error al buscar sesión por token:', error);
+      throw error;
+    }
   }
 
   /**
@@ -100,8 +130,8 @@ class SequelizeSessionRepository extends SessionRepository {
       sessionData.token,
       parseFloat(sessionData.valor),
       sessionData.isUsed,
-      sessionData.createdAt,
-      sessionData.expiresAt
+      new Date(sessionData.createdAt),
+      new Date(sessionData.expiresAt)
     );
   }
 }
